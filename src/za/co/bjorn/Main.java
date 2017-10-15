@@ -1,14 +1,10 @@
 package za.co.bjorn;
 
-import za.co.bjorn.game.objects.Game;
-import za.co.bjorn.game.objects.GameMap;
-import za.co.bjorn.game.objects.GameNode;
-import za.co.bjorn.game.objects.GameRules;
+import za.co.bjorn.game.Game;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.FileReader;
-import java.util.ArrayList;
 
 public class Main {
 

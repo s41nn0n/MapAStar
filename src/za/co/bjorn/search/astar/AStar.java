@@ -4,5 +4,4 @@ import za.co.bjorn.game.objects.GameNode;
 
 public class AStar {
 
-
 }

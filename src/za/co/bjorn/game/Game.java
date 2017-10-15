@@ -1,4 +1,9 @@
-package za.co.bjorn.game.objects;
+package za.co.bjorn.game;
+
+import za.co.bjorn.game.objects.GameMap;
+import za.co.bjorn.game.objects.GameNode;
+import za.co.bjorn.game.objects.GamePoint;
+import za.co.bjorn.game.objects.GameRules;
 
 import java.util.ArrayList;
 
@@ -57,7 +62,12 @@ public class Game {
     public void buildPaths() {
         for (int yCounter = 0; yCounter < this.maxY; yCounter++) {
             for (int xCounter = 0; xCounter < this.maxY; xCounter++) {
+
+
+
+
                 if(GameRules.getValidPathToChar(this.gameNodes.get((this.maxY*yCounter) + xCounter).getType())) {
+
                     buildPath(xCounter, yCounter);
                 }
             }
@@ -107,11 +117,22 @@ public class Game {
 
     private void buildPath(int x, int y) {
 
+
+
         this.gameNodes.get(this.maxY*y + x).calculateNodeHCost(this.gameNodes.get((this.maxY*(endPos.getY())) + endPos.getX()));
         boolean before = checkBefore(y);
         boolean after = checkAfter(y);
         boolean left = checkLeft(x);
         boolean right = checkRight(x);
+
+//        if (x == 3 && y == 2) {
+//            System.out.println(y+":"+x);
+//            System.out.println("\tbefore = " + before);
+//            System.out.println("\tafter = " + after);
+//            System.out.println("\tleft = " + left);
+//            System.out.println("\tright = " + left);
+//            System.out.println("\t\t" + this.gameNodes.get((this.maxY*y) + x).getY() + ":" + this.gameNodes.get((this.maxY*y) + x).getX() + " => " + this.gameNodes.get((this.maxY*y) + x).getType());
+//        }
 
         // Diagonals
         //Top Left

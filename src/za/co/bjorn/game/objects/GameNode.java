@@ -17,7 +17,7 @@ public class GameNode {
     private GameNode previous;
 
     public int getCost(){
-        return this.manhattenCost;
+        return this.manhattenCost + GameRules.getGameNodeCost(this.getType());
     }
 
     public void calculateNodeHCost(GameNode end) {
@@ -36,7 +36,11 @@ public class GameNode {
     }
 
     public void addPath(GameNode path) {
+//        System.out.println("\t\t" + path.getY() + ":" + path.getX() + " => " + path.getType());
+
         if (GameRules.getValidPathToChar(path.getType())) {
+//            System.out.println("\t\t\tTrue");
+
             this.validPath.add(path);
         }
     }

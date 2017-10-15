@@ -15,7 +15,7 @@ public class GameMap {
         if (map.size() <= y) {
             map.add(y, new StringBuffer(terrain));
         } else {
-            StringBuffer r = new StringBuffer(terrain);
+//            StringBuffer r = new StringBuffer(terrain);
             map.get(y).append(terrain);
         }
     }
