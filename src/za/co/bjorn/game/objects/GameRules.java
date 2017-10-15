@@ -10,6 +10,12 @@ public class GameRules {
 
     public static final char startChar = '@';
     public static final char endChar = 'X';
+    public static final char visitedChar = '#';
+
+    public static final String smallMap = "./maps/small_map.txt";
+    public static final String largeMap = "./maps/large_map.txt";
+
+    public static final  int initialCapacity = 1000;
 
     static {
         gameNodeCost.put('*', 2);

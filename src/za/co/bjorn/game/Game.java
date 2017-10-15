@@ -11,11 +11,11 @@ public class Game {
     public Game() {
     }
 
-    GamePoint currentPos, endPos;
-    GameMap gameMap = new GameMap();
-    int gameScore = 0;
-    int maxY, maxX = -1;
-    ArrayList<GameNode> gameNodes = new ArrayList<GameNode>();
+    private GamePoint currentPos, endPos;
+    private GameMap gameMap = new GameMap();
+    private int gameScore = 0;
+    private int maxY, maxX = -1;
+    private ArrayList<GameNode> gameNodes = new ArrayList<GameNode>();
 
     public int getGameScore() {
         return this.gameScore;
@@ -47,8 +47,10 @@ public class Game {
     }
 
     public void addNode(int x, int y, char type) {
-        if (GameRules.startChar == type)
+        if (GameRules.startChar == type) {
             currentPos = new GamePoint(x, y);
+            gameMap.setWalked(x,y);
+        }
         if (GameRules.endChar == type)
             endPos = new GamePoint(x, y);
 
@@ -73,22 +75,22 @@ public class Game {
             }
         }
 
-        for (int yCounter = 0; yCounter < this.maxY; yCounter++) {
-            for (int xCounter = 0; xCounter < this.maxY; xCounter++) {
-//                if(GameRules.getValidPathToChar(this.gameNodes.get((this.maxY*yCounter) + xCounter).getType())) {
-//                    if (GameRules.startChar == this.gameNodes.get((this.maxY*yCounter) + xCounter).getType())
-//                        start = new GamePoint(xCounter, yCounter);
-//                    if (GameRules.endChar == this.gameNodes.get((this.maxY*yCounter) + xCounter).getType())
-//                        end = new GamePoint(xCounter, yCounter);
-//                    buildPath(xCounter, yCounter);
-//                }
-
-                System.out.println(yCounter + ":" + xCounter);
-                for (GameNode g: this.gameNodes.get((this.maxY*yCounter) + xCounter).getValidPath()) {
-                    System.out.println("\t" + g.getY() + ":" + g.getX() + " -=> " + g.getCost());
-                }
-            }
-        }
+//        for (int yCounter = 0; yCounter < this.maxY; yCounter++) {
+//            for (int xCounter = 0; xCounter < this.maxY; xCounter++) {
+////                if(GameRules.getValidPathToChar(this.gameNodes.get((this.maxY*yCounter) + xCounter).getType())) {
+////                    if (GameRules.startChar == this.gameNodes.get((this.maxY*yCounter) + xCounter).getType())
+////                        start = new GamePoint(xCounter, yCounter);
+////                    if (GameRules.endChar == this.gameNodes.get((this.maxY*yCounter) + xCounter).getType())
+////                        end = new GamePoint(xCounter, yCounter);
+////                    buildPath(xCounter, yCounter);
+////                }
+//
+////                System.out.println(yCounter + ":" + xCounter);
+////                for (GameNode g: this.gameNodes.get((this.maxY*yCounter) + xCounter).getValidPath()) {
+////                    System.out.println("\t" + g.getY() + ":" + g.getX() + " -=> " + g.getCost());
+////                }
+//            }
+//        }
 
     }
 
@@ -124,15 +126,6 @@ public class Game {
         boolean after = checkAfter(y);
         boolean left = checkLeft(x);
         boolean right = checkRight(x);
-
-//        if (x == 3 && y == 2) {
-//            System.out.println(y+":"+x);
-//            System.out.println("\tbefore = " + before);
-//            System.out.println("\tafter = " + after);
-//            System.out.println("\tleft = " + left);
-//            System.out.println("\tright = " + left);
-//            System.out.println("\t\t" + this.gameNodes.get((this.maxY*y) + x).getY() + ":" + this.gameNodes.get((this.maxY*y) + x).getX() + " => " + this.gameNodes.get((this.maxY*y) + x).getType());
-//        }
 
         // Diagonals
         //Top Left
@@ -203,4 +196,17 @@ public class Game {
     public boolean checkValidMap() {
         return true;
     }
+
+    public int getMaxY(){
+        return this.maxY;
+    }
+
+    public int getMaxX() {
+        return this.maxX;
+    }
+
+    public void setVisited(int x, int y) {
+        this.gameMap.setWalked(x, y);
+    }
+
 }

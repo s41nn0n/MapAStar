@@ -1,6 +1,8 @@
 package za.co.bjorn;
 
 import za.co.bjorn.game.Game;
+import za.co.bjorn.game.objects.GameRules;
+import za.co.bjorn.search.astar.AStar;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,14 +12,9 @@ public class Main {
 
     public static void main(String[] args) {
         BufferedReader br = null;
-
-        System.out.println("Working Directory = " +
-                System.getProperty("user.dir"));
-
         Game game = new Game();
-
         try {
-            br = new BufferedReader(new FileReader("./maps/small_map.txt"));
+            br = new BufferedReader(new FileReader(GameRules.largeMap));
             String line;
             int yCount = 0;
             while ((line = br.readLine()) != null) {
@@ -35,6 +32,10 @@ public class Main {
 
             if (game.checkValidMap()) {
                 game.buildPaths();
+
+                AStar aStar = new AStar();
+                aStar.findPath(game);
+
                 game.displayMap();
             } else {
                 //This should throw error

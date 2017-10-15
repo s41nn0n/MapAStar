@@ -10,12 +10,9 @@ public class GameMap {
     }
 
     public void setTerrain(int y, String terrain) {
-//        System.out.println("setTerrain: " + y + " - "  + terrain);
-
         if (map.size() <= y) {
             map.add(y, new StringBuffer(terrain));
         } else {
-//            StringBuffer r = new StringBuffer(terrain);
             map.get(y).append(terrain);
         }
     }
@@ -30,7 +27,7 @@ public class GameMap {
 
 
     public void setWalked(int x, int y) {
-        map.get(y).setCharAt(x, '#');
+        map.get(y).setCharAt(x, GameRules.visitedChar);
     }
 
     public String toString() {

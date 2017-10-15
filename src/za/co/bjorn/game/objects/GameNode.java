@@ -1,14 +1,14 @@
 package za.co.bjorn.game.objects;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class GameNode {
+
     private ArrayList<GameNode> validPath;
     private int x;
     private int y;
-    private int moveCost;
 
+    private int moveCost;
     private boolean visited = false;
 
     //Heuristic Value
@@ -16,7 +16,7 @@ public class GameNode {
     private char type;
     private GameNode previous;
 
-    public int getCost(){
+    public int getHeuristicCost(){
         return this.manhattenCost + GameRules.getGameNodeCost(this.getType());
     }
 
@@ -36,15 +36,10 @@ public class GameNode {
     }
 
     public void addPath(GameNode path) {
-//        System.out.println("\t\t" + path.getY() + ":" + path.getX() + " => " + path.getType());
-
         if (GameRules.getValidPathToChar(path.getType())) {
-//            System.out.println("\t\t\tTrue");
-
             this.validPath.add(path);
         }
     }
-
 
     public ArrayList<GameNode> getValidPath() {
         return validPath;
@@ -56,10 +51,6 @@ public class GameNode {
 
     public int getY() {
         return y;
-    }
-
-    public int getMoveCost() {
-        return moveCost;
     }
 
     public void setValidPath(ArrayList<GameNode> validPath) {
@@ -79,16 +70,8 @@ public class GameNode {
         this.y = y;
     }
 
-    public void setMoveCost(int cost) {
-        this.moveCost = cost;
-    }
-
     public GameNode getPrevious() {
         return previous;
-    }
-
-    public void setPrevious(GameNode previous) {
-        this.previous = previous;
     }
 
     public char getType() {
@@ -101,6 +84,22 @@ public class GameNode {
 
     public void setVisited(boolean visited) {
         this.visited = visited;
+    }
+
+    public void setParent(GameNode parentNode) {
+        if (this.previous != null)
+            this.previous.setVisited(false);
+        this.previous = parentNode;
+        if (parentNode != null)
+            parentNode.setVisited(true);
+    }
+
+    public String toString(){
+        return this.getY() + ":" + this.getX() + " h => " + this.getHeuristicCost() + " m => " + this.moveCost;
+    }
+
+    public boolean hasParent() {
+        return (this.previous != null);
     }
 
 }
