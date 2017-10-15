@@ -1,7 +1,8 @@
 package za.co.bjorn.search.astar;
 
-public class AStar {
+import za.co.bjorn.game.objects.GameNode;
 
+public class AStar {
 
 
 }

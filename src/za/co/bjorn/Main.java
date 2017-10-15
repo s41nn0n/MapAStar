@@ -31,19 +31,14 @@ public class Main {
                 int xCount = 0;
                 // This builds up the Game Nodes
                 for (char type: line.toCharArray()) {
-//                    if (GameRules.checkValidMapChar(type)) {
                     game.addNode(xCount++, yCount, type);
                     game.setMaxX(xCount);
-//                    }
                 }
                 game.setMaxY(++yCount);
             }
 
             if (game.checkValidMap()) {
                 game.buildPaths();
-
-//                game.searchToEnd();
-
                 game.displayMap();
             } else {
                 //This should throw error

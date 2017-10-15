@@ -7,10 +7,23 @@ public class GameNode {
     private ArrayList<GameNode> validPath;
     private int x;
     private int y;
-    private int cost;
+    private int moveCost;
+
+    private boolean visited = false;
+
+    //Heuristic Value
+    private int manhattenCost = -1;
     private char type;
     private GameNode previous;
 
+    public int getCost(){
+        return this.manhattenCost;
+    }
+
+    public void calculateNodeHCost(GameNode end) {
+        if (this.manhattenCost == -1)
+            this.manhattenCost = Math.abs((this.getX() - end.getX()) + (this.getY() - end.getY()));
+    }
 
     public GameNode(int x, int y, char type) {
         validPath = new ArrayList<GameNode>();
@@ -18,7 +31,7 @@ public class GameNode {
         this.x = x;
         this.y = y;
         this.type = type;
-        this.cost = GameRules.getGameNodeCost(type);
+        this.moveCost = GameRules.getGameNodeCost(type);
 
     }
 
@@ -41,8 +54,8 @@ public class GameNode {
         return y;
     }
 
-    public int getCost() {
-        return cost;
+    public int getMoveCost() {
+        return moveCost;
     }
 
     public void setValidPath(ArrayList<GameNode> validPath) {
@@ -62,8 +75,8 @@ public class GameNode {
         this.y = y;
     }
 
-    public void setCost(int cost) {
-        this.cost = cost;
+    public void setMoveCost(int cost) {
+        this.moveCost = cost;
     }
 
     public GameNode getPrevious() {
@@ -80,6 +93,10 @@ public class GameNode {
 
     public void setType(char type) {
         this.type = type;
+    }
+
+    public void setVisited(boolean visited) {
+        this.visited = visited;
     }
 
 }

@@ -6,20 +6,10 @@ public class Game {
     public Game() {
     }
 
-
-
-    GamePoint start;
-    GamePoint end;
-
-
+    GamePoint currentPos, endPos;
     GameMap gameMap = new GameMap();
     int gameScore = 0;
-
-    //This is essentially n - 1 columns / rows
     int maxY, maxX = -1;
-
-
-
     ArrayList<GameNode> gameNodes = new ArrayList<GameNode>();
 
     public int getGameScore() {
@@ -51,8 +41,13 @@ public class Game {
         gameMap.setTerrain(y,s);
     }
 
-    public void addNode(int x, int y, char s) {
-        gameNodes.add(new GameNode(x, y, s));
+    public void addNode(int x, int y, char type) {
+        if (GameRules.startChar == type)
+            currentPos = new GamePoint(x, y);
+        if (GameRules.endChar == type)
+            endPos = new GamePoint(x, y);
+
+        gameNodes.add(new GameNode(x, y, type));
     }
 
     public void displayMap(){
@@ -63,48 +58,98 @@ public class Game {
         for (int yCounter = 0; yCounter < this.maxY; yCounter++) {
             for (int xCounter = 0; xCounter < this.maxY; xCounter++) {
                 if(GameRules.getValidPathToChar(this.gameNodes.get((this.maxY*yCounter) + xCounter).getType())) {
-                    if (GameRules.startChar == this.gameNodes.get((this.maxY*yCounter) + xCounter).getType())
-                        start = new GamePoint(xCounter, yCounter);
-                    if (GameRules.endChar == this.gameNodes.get((this.maxY*yCounter) + xCounter).getType())
-                        end = new GamePoint(xCounter, yCounter);
-
                     buildPath(xCounter, yCounter);
                 }
             }
         }
+
+        for (int yCounter = 0; yCounter < this.maxY; yCounter++) {
+            for (int xCounter = 0; xCounter < this.maxY; xCounter++) {
+//                if(GameRules.getValidPathToChar(this.gameNodes.get((this.maxY*yCounter) + xCounter).getType())) {
+//                    if (GameRules.startChar == this.gameNodes.get((this.maxY*yCounter) + xCounter).getType())
+//                        start = new GamePoint(xCounter, yCounter);
+//                    if (GameRules.endChar == this.gameNodes.get((this.maxY*yCounter) + xCounter).getType())
+//                        end = new GamePoint(xCounter, yCounter);
+//                    buildPath(xCounter, yCounter);
+//                }
+
+                System.out.println(yCounter + ":" + xCounter);
+                for (GameNode g: this.gameNodes.get((this.maxY*yCounter) + xCounter).getValidPath()) {
+                    System.out.println("\t" + g.getY() + ":" + g.getX() + " -=> " + g.getCost());
+                }
+            }
+        }
+
+    }
+
+    private boolean checkBefore(int y){
+        //This means we can build all paths with y axis before
+        //This should always be null when y = 0
+        StringBuffer yBeforeValue = this.gameMap.getY(y-1);
+        return (yBeforeValue != null);
+    }
+
+
+    private boolean checkAfter(int y){
+        //This means we can build all paths with y axis after
+        //This should always be null when y = max(y)
+        StringBuffer yAfterValue = this.gameMap.getY(y+1);
+        return (yAfterValue != null);
+    }
+
+    private boolean checkLeft(int x){
+        return (x > 0);
+    }
+
+    private boolean checkRight(int x){
+        return (x < maxX-1);
     }
 
     private void buildPath(int x, int y) {
-        StringBuffer yBeforeValue = this.gameMap.getY(y-1);
-        StringBuffer yAfterValue = this.gameMap.getY(y+1);
-//        StringBuffer yValue = gameMap.getY(y);
-//        System.out.println("Working on: " + y + ":" + x);
-//        System.out.println("Working on: " + this.gameNodes.get((this.maxY*(y)) + x).getY() + ":" + this.gameNodes.get((this.maxY*(y)) + x).getX());
 
-        if (yBeforeValue != null) {
-            //This means we can build all paths with y axis before
-            //This should always be null when y = 0
-//            System.out.println("\t1 addPath: " + this.gameNodes.get((this.maxY*(y-1)) + x).getY() + ":" + this.gameNodes.get((this.maxY*(y-1)) + x).getX());
+        this.gameNodes.get(this.maxY*y + x).calculateNodeHCost(this.gameNodes.get((this.maxY*(endPos.getY())) + endPos.getX()));
+        boolean before = checkBefore(y);
+        boolean after = checkAfter(y);
+        boolean left = checkLeft(x);
+        boolean right = checkRight(x);
 
+        // Diagonals
+        //Top Left
+        if (before && left) {
+            this.gameNodes.get((this.maxY*y) + x).addPath(this.gameNodes.get((this.maxY*(y-1)) + (x-1)));
+        }
+        //Top Right
+        if (before && right) {
+            this.gameNodes.get((this.maxY*y) + x).addPath(this.gameNodes.get((this.maxY*(y-1)) + (x+1)));
+        }
+
+
+        //Bottom Left
+        if (after && left){
+            this.gameNodes.get((this.maxY*y) + x).addPath(this.gameNodes.get((this.maxY*(y+1)) + (x-1)));
+        }
+        //Bottom Right
+        if (after && right){
+            this.gameNodes.get((this.maxY*y) + x).addPath(this.gameNodes.get((this.maxY*(y+1)) + (x+1)));
+        }
+        // Verticals
+        if (before) {
             this.gameNodes.get((this.maxY*y) + x).addPath(this.gameNodes.get((this.maxY*(y-1)) + x));
         }
 
-        if (yAfterValue != null) {
-            //This means we can build all paths with y axis after
-            //This should always be null when y = max(y)
-//            System.out.println("\t2 addPath: " + this.gameNodes.get((this.maxY*(y+1)) + x).getY() + ":" + this.gameNodes.get((this.maxY*(y+1)) + x).getX());
+        if (after) {
             this.gameNodes.get((this.maxY*y) + x).addPath(this.gameNodes.get((this.maxY*(y+1)) + x));
         }
 
-        //We need to do x + 1 and x - 1 as well
-        if (x > 0) {
-//            System.out.println("\t3 addPath: " + this.gameNodes.get((this.maxY*y) + x -1).getY() + ":" + this.gameNodes.get((this.maxY*y) + x -1).getX());
+        // Horizontals
+        // We need to do x + 1 and x - 1 as well
+        if (left) {
             this.gameNodes.get(this.maxY*y + x).addPath(this.gameNodes.get(this.maxY*y + x-1));
         }
-        if (x < maxX-1) {
-//            System.out.println("\t4 addPath: " + this.gameNodes.get((this.maxY*y) + x+1).getY() + ":" + this.gameNodes.get((this.maxY*y) + x+1).getX());
+        if (right) {
             this.gameNodes.get(this.maxY*y + x).addPath(this.gameNodes.get(this.maxY*y + x+1));
         }
+
     }
 
     public void setMaxX(int x){
@@ -119,19 +164,19 @@ public class Game {
 
 
     public GamePoint getStart() {
-        return start;
+        return currentPos;
     }
 
     public void setStart(GamePoint start) {
-        this.start = start;
+        this.currentPos = start;
     }
 
     public GamePoint getEnd() {
-        return end;
+        return endPos;
     }
 
     public void setEnd(GamePoint end) {
-        this.end = end;
+        this.endPos = end;
     }
 
     public boolean checkValidMap() {
