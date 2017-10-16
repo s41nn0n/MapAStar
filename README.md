@@ -24,3 +24,7 @@ The maps provided are under the maps folder.
 # Result
 
 maps/large_result.txt
+
+Resource:
+
+[Wikipedia Page](https://en.wikipedia.org/wiki/A*_search_algorithm)
