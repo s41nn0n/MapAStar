@@ -21,6 +21,6 @@ The maps provided are under the maps folder.
 
 *. All the rows were of equal length Maps could not be different width on different rows.
 
-#Result
+# Result
 
 maps/large_result.txt
